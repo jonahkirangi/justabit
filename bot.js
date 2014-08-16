@@ -10,6 +10,21 @@ var T = new Twit({
 function retweetRecent() {
     T.get('search/tweets', {q: "#burningman", result_type: "recent"},
       function (err, data, response) {
-        ...
+        if (!err) {
+    var retweetId = data.statuses[0].id_str;
+    T.post('statuses/retweet/' + retweetId, { }, function (err, response) {
+        if (response) {
+            console.log('Retweeted Tweet ID: ' + retweetId);
+        }
+        if (err) {
+            console.log('Retweet Error: ', err);
+        }
+    });
+} else {
+    console.log('Search Error: ', err);
+}
     });
 }
+
+retweetRecent();
+setInterval(retweetRecent, 1800000);
